@@ -5,7 +5,7 @@ import pandas as pd
 from dotenv import load_dotenv
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import Chroma
-from langchain_openai import OpenAIEmbeddings
+from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain.schema import Document
 
 
@@ -62,7 +62,7 @@ def main():
     split_docs = splitter.split_documents(docs)
     print(f"Split into {len(split_docs)} chunks")
 
-    embeddings = OpenAIEmbeddings()
+    embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
 
     print("Building and persisting Chroma vector store for product docs...")
     Chroma.from_documents(

@@ -3,7 +3,8 @@ from pathlib import Path
 from typing import List
 
 from dotenv import load_dotenv
-from langchain_openai import ChatOpenAI, OpenAIEmbeddings
+from langchain_openai import ChatOpenAI
+from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.vectorstores import Chroma
 
 
@@ -13,8 +14,8 @@ def load_vector_store(base_dir: Path) -> Chroma:
         raise RuntimeError(
             "Vector store not found. Run `python ingest.py` in the project root to build the Chroma DB."
         )
-    embeddings = OpenAIEmbeddings()
-    return Chroma(persist_directory=str(persist_dir), embedding_function=embeddings)
+    embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+    return Chroma(persist_directory=str(persist_dir), embedding_function=embeddings,)
 
 
 def retrieve_relevant_chunks(store: Chroma, query: str, k: int = 4) -> List[str]:
