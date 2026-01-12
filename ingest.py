@@ -62,6 +62,10 @@ def main():
     split_docs = splitter.split_documents(docs)
     print(f"Split into {len(split_docs)} chunks")
 
+    if not split_docs:
+        print("No documents to index; skipping vector store build.")
+        return
+
     embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
 
     print("Building and persisting Chroma vector store for product docs...")
