@@ -4,7 +4,7 @@ from typing import List
 from dotenv import load_dotenv
 from fastapi import FastAPI
 from pydantic import BaseModel
-from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 from langchain_community.vectorstores import Chroma
 
 
@@ -18,10 +18,8 @@ if not persist_dir.exists():
         "Vector store not found. Run `python ingest.py` in the project root to build the Chroma DB before starting the API."
     )
 
-embeddings = HuggingFaceEmbeddings(
-    model_name="sentence-transformers/all-MiniLM-L6-v2"
-)
-vector_store = Chroma(persist_directory=str(persist_dir), embedding_function=embeddings)
+embeddings = OpenAIEmbeddings()
+vector_store = Chroma(persist_directory=str(persist_dir), embedding_function=embeddings,)
 llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.2)
 
 
