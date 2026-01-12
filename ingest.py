@@ -11,9 +11,12 @@ from langchain.schema import Document
 
 def load_excel_documents(data_dir: Path):
     docs = []
+    print(f"[DEBUG] Scanning for Excel files under: {data_dir}")
     for path in data_dir.glob("**/*.xlsx"):
+        print(f"[DEBUG] Found Excel file: {path}")
         try:
             df = pd.read_excel(path)
+            print(f"[DEBUG] {path.name}: {len(df)} rows")
         except Exception as e:
             print(f"[WARN] Failed to read {path}: {e}")
             continue
@@ -38,7 +41,8 @@ def load_excel_documents(data_dir: Path):
                     },
                 )
             )
-
+    
+    print(f"[DEBUG] Total docs created from Excel: {len(docs)}")
     return docs
 
 
